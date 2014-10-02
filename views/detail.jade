@@ -1,0 +1,27 @@
+h3 Connector Details
+hr
+a(href="#",onclick="window.history.back(); return false;") Back
+
+div
+	label Connector type
+	div
+		strong {{connector.type[0]}}
+div
+	label Configuration
+	div
+		label protocol
+		div
+			strong {{connector.configuration[0].protocol[0]}}
+	div
+		label host
+		div
+			strong {{connector.configuration[0].host[0]}}
+	div
+		label port
+		div
+			strong {{connector.configuration[0].port[0]}}
+
+h4 Procedures
+ul
+	li(ng-repeat="proc in connector.procedures[0]")
+		a(href="#",ng-click="$parent.invoke(proc[0].$.name)") {{ proc[0].$.name }}		

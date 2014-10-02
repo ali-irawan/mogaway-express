@@ -6,6 +6,7 @@ var serveStatic = require('serve-static');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 var fs = require('fs');
+var parseString = require('xml2js').parseString;
 var app = express();
 
 app.set('views', __dirname + '/views')
@@ -29,17 +30,55 @@ app.use(session({
 }));
 
 app.get('/', function(req,res){
+	res.render('index');
+});
+app.get('/list', function(req,res){
+	res.render('list');
+});
+app.get('/detail', function(req,res){
+	res.render('detail');
+});
+app.get('/api/connector/list', function(req,res){
 	var dir = './connector/'; // your directory
 
 	var files = fs.readdirSync(dir);
+	
+	var list = [];
+	
 	files.sort(function(a, b) {
-	               return fs.statSync(dir + a).mtime.getTime() - 
-	                      fs.statSync(dir + b).mtime.getTime();
+	               return a - b;
+	});
+
+	for(var i=0;i<files.length;i++){
+		if(files[i]!='.gitignore'){
+			list.push(files[i]);
+		}
+	}
+
+	res.json({ connectors: list });
+});
+app.get('/api/connector/detail/:name', function(req,res){
+	
+	var name = req.params.name;
+	logger.info('Connector name: ' + name);
+	
+	var dir = './connector/';
+	var filename = dir + name + '/' + name + '.xml';
+	
+	logger.info('Read configuration: ' + filename);
+	fs.readFile(filename, "utf8", function (err, data) {
+		// logger.info(err);
+		// logger.info(data);
+		
+		parseString(data, function (err, result) {
+			
+		    res.end(JSON.stringify(result));
+		});
+		
 	});
 	
-	res.render('welcome', { connectors: files });
+	
 });
-
 /**
  * {
  *     connector: "...",
@@ -61,4 +100,5 @@ app.post('/query',function(req, res){
 	res.json(connector[proc](params));
 });
 
+app.use(serveStatic(__dirname + "/www"));
 app.listen(60000);
