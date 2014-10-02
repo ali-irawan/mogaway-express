@@ -1,4 +1,22 @@
 angular.module('mogawayApp',['ngRoute'])
+/*.config(function($stateProvider, $urlRouterProvider){
+	console.log('Start App');
+	console.log($stateProvider);
+	
+	$stateProvider
+	  .state('list', {
+		  url: '/list',
+		  templateUrl: 'list',
+		  controller: 'ListCtrl'
+	  })
+	  .state('detail',{
+		  url: '/detail',
+		  templateUrl: 'detail',
+		  controller: 'DetailCtrl'
+	  });
+	
+	$urlRouterProvider.otherwise("list");
+})*/
 .config(['$routeProvider', '$locationProvider', 
     function($routeProvider, $locationProvider) {
 	

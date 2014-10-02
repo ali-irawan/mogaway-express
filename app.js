@@ -101,4 +101,9 @@ app.post('/query',function(req, res){
 });
 
 app.use(serveStatic(__dirname + "/www"));
+
+//The 404 Route (ALWAYS Keep this as the last route)
+app.get('*', function(req, res){
+  res.redirect('/');
+});
 app.listen(60000);
